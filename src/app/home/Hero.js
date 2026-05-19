@@ -7,8 +7,6 @@ import ShaderBackground from "@/components/ui/ShaderBackground";
 import { useState, useEffect } from 'react';
 import { motion } from "motion/react";
 import { useLoading } from "@/context/LoadingContext";
-import Link from "next/link";
-
 export default function Hero() {
   const { isLoaded } = useLoading();
   // Use a fixed default to match SSR output; update to actual viewport after mount to avoid hydration mismatches.
@@ -125,14 +123,7 @@ export default function Hero() {
                 <span className="text-[#EB0028] text-[9px] font-black">th</span>
                 <span className="text-white text-sm font-black ml-1 uppercase text-nowrap">April 2026</span>
               </div>
-              <div className="mt-4">
-                <Link
-                  href="/register"
-                  className="inline-flex items-center justify-center rounded-full border border-[#e62b1e] bg-[#e62b1e] px-8 py-3 text-sm font-semibold tracking-wide text-white transition-colors duration-200 hover:bg-black/50"
-                >
-                  Register Now
-                </Link>
-              </div>
+
             </div>
           </div>
         ) : (
@@ -162,15 +153,7 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Register button - desktop */}
-            <div className="mt-8">
-              <Link
-                href="/register"
-                className="inline-flex items-center justify-center rounded-full border border-[#e62b1e] bg-[#e62b1e] px-8 py-3 text-sm font-semibold tracking-wide text-white transition-colors duration-200 hover:bg-black/50"
-              >
-                Register Now
-              </Link>
-            </div>
+
 
           </div>
         )}
