@@ -7,28 +7,28 @@ import { useRef, useEffect, useState } from "react";
 import GridMotion from "@/components/ui/GridMotion";
 import BlurText from "@/components/ui/BlurText";
 const galleryImages = [
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531091/17_zenpc5.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531091/5_glbmit.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531096/26_mpp04q.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531091/2_fb035y.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/19_pikpck.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531091/18_mvexp5.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/4_yxhpde.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/20_gyps9p.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/4_yxhpde.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/20_gyps9p.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/21_rcul9x.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531093/8_uofvsy.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531093/22_c3htug.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531094/10_tylnii.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531092/6_nsljtc.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531095/25_zfl10e.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531093/11_exubsi.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531095/24_b8jwi8.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531094/23_otymrr.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531090/1_wdpgdn.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531096/12_vnsf73.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531096/14_lhy5fn.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597734/DSC00813_zexolq.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597734/DSC00879_jpiyvm.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC00979_hb8d9l.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC00805_vk37qz.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC00850_j68tvv.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC00799_ngkhvr.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC01051_cmqviw.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC01080_vejycs.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00983_zkdib1.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00916_rwvffd.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC08387_beok7g.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00998_kpyyz8.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC08502_ozed2q.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597730/DSC08154_jj9qv9.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597730/DSC08344_hgbvkb.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597730/DSC08148_dyj2kz.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597729/DSC08129_caqncj.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597729/DSC01149_qqakdq.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597729/DSC01100_qtmhdf.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597729/DSC08602_i40q2j.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597729/DSC08070_elqf42.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597728/DSC08775_przlhr.jpg",
 ];
 
 const placeholderItems = galleryImages.map((src, i) => (
@@ -78,8 +78,8 @@ export default function Gallery() {
             Gallery
           </span>
           <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none tracking-tight uppercase">
-            <span className="text-[#e62b1e]">LAST</span>{" "}
-            <span className="text-white">YEAR</span>
+            <span className="text-[#e62b1e]">THIS</span>{" "}
+            <span className="text-white">YEAR'S</span>
             <br />
             <span className="text-white">HIGH</span>
             <span className="text-[#e62b1e]">LIGHTS</span>
