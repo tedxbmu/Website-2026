@@ -17,7 +17,7 @@ const galleryImages = [
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597733/DSC01080_vejycs.jpg",
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00983_zkdib1.jpg",
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00916_rwvffd.jpg",
-  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC08387_beok7g.jpg",
+  "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1782393307/DSC08468_ccdje9.jpg",
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC00998_kpyyz8.jpg",
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597731/DSC08502_ozed2q.jpg",
   "https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781597730/DSC08154_jj9qv9.jpg",
