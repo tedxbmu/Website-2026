@@ -106,6 +106,12 @@ export async function getAdminStats(token) {
   });
 }
 
+export async function getAdminFeedback(token) {
+  return apiFetch("/api/admin/feedback", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
 export async function markAttendance(token, qr_data) {
   return apiFetch("/api/attendance/mark", {
     method: "POST",

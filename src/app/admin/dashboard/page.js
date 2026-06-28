@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAdminStats, downloadExcel } from "@/lib/api";
-import { Users, UserCheck, Download, Loader2, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { getAdminStats, getAdminFeedback, downloadExcel } from "@/lib/api";
+import { Users, UserCheck, Download, Loader2, ArrowRight, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 
 function StatCard({ title, value, icon: Icon, color, delay }) {
@@ -11,7 +12,7 @@ function StatCard({ title, value, icon: Icon, color, delay }) {
       className="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden group animate-in slide-in-from-bottom flex flex-col items-center justify-center text-center"
       style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
     >
-      <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-[40px] opacity-20 transition-opacity group-hover:opacity-40`} style={{ backgroundColor: color }} />
+      <div className={`absolute -right-4 -top-4 w-24 h-24 rounded-full blur-2xl opacity-20 transition-opacity group-hover:opacity-40`} style={{ backgroundColor: color }} />
       <div className="flex flex-col items-center gap-4 relative z-10 w-full">
         <div className="p-3 rounded-xl bg-white/5" style={{ color: color }}>
           <Icon className="w-6 h-6" />
@@ -28,7 +29,9 @@ function StatCard({ title, value, icon: Icon, color, delay }) {
 }
 
 export default function AdminDashboardPage() {
+  const router = useRouter();
   const [stats, setStats] = useState(null);
+  const [feedbackRows, setFeedbackRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [downloadingRegex, setDownloadingRegex] = useState(false);
@@ -47,9 +50,11 @@ export default function AdminDashboardPage() {
         return;
       }
       const result = await getAdminStats(token);
+      const feedbackResult = await getAdminFeedback(token);
       
       if (result.success) {
         setStats(result.data);
+        setFeedbackRows(feedbackResult.success ? (feedbackResult.data.feedback || []) : []);
       } else {
         // Token is invalid or expired — clear it and redirect to login
         if (result.status === 401 || result.status === 403) {
@@ -145,6 +150,65 @@ export default function AdminDashboardPage() {
         />
       </div>
 
+      <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8">
+        <div className="flex items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
+          <div>
+            <h2 className="text-lg font-bold uppercase tracking-widest flex items-center gap-2">
+              <MessageSquareText className="w-5 h-5 text-[#e62b1e]" />
+              Feedback Submissions
+            </h2>
+            <p className="text-white/40 text-sm mt-1">Latest entries from Supabase.</p>
+          </div>
+          <div className="text-white/50 text-xs tracking-widest uppercase font-semibold">
+            {feedbackRows.length} records
+          </div>
+        </div>
+
+        <div className="overflow-x-auto rounded-xl border border-white/10">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-white/5 text-white/60 uppercase tracking-widest text-xs">
+              <tr>
+                <th className="px-4 py-3 font-semibold">Name</th>
+                <th className="px-4 py-3 font-semibold">Email</th>
+                <th className="px-4 py-3 font-semibold">Phone</th>
+                <th className="px-4 py-3 font-semibold">Rating</th>
+                <th className="px-4 py-3 font-semibold">Feedback</th>
+                <th className="px-4 py-3 font-semibold">Recipient</th>
+                <th className="px-4 py-3 font-semibold">Submitted At</th>
+              </tr>
+            </thead>
+            <tbody>
+              {feedbackRows.length === 0 ? (
+                <tr>
+                  <td className="px-4 py-6 text-white/40" colSpan={7}>
+                    No feedback submissions found yet.
+                  </td>
+                </tr>
+              ) : (
+                feedbackRows.map((row, index) => (
+                  <tr key={`${row.email || row.name}-${row.created_at || index}`} className="border-t border-white/10 align-top">
+                    <td className="px-4 py-4 text-white">{row.name || "-"}</td>
+                    <td className="px-4 py-4 text-white/70">{row.email || "-"}</td>
+                    <td className="px-4 py-4 text-white/70">{row.phone || "-"}</td>
+                    <td className="px-4 py-4 text-white/70">{row.rating || "-"}</td>
+                    <td className="px-4 py-4 text-white/70 max-w-md">
+                      <span className="line-clamp-3">{row.feedback || "-"}</span>
+                    </td>
+                    <td className="px-4 py-4 text-white/70">
+                      <div>{row.recipient_name || "-"}</div>
+                      <div className="text-white/40 text-xs">{row.recipient_role || ""}</div>
+                    </td>
+                    <td className="px-4 py-4 text-white/50 whitespace-nowrap">
+                      {row.created_at ? new Date(row.created_at).toLocaleString() : "-"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:mt-4">
         {/* Quick Actions */}
         <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col">
@@ -189,7 +253,7 @@ export default function AdminDashboardPage() {
         <div className="relative bg-[#e62b1e]/10 border border-[#e62b1e]/30 rounded-2xl p-6 md:p-8 flex flex-col overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-[#e62b1e] rounded-full blur-[100px] opacity-20 pointer-events-none" />
           
-          <div className="relative z-10 h-full flex flex-col h-full">
+          <div className="relative z-10 h-full flex flex-col">
             <h2 className="text-lg font-bold uppercase tracking-widest mb-2 text-[#e62b1e]">QR Code Operations</h2>
             <p className="text-white/60 text-sm mb-8">Scan attendee QR codes at the venue entrance to securely mark them as attended in real-time.</p>
             
