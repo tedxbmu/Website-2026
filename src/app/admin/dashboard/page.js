@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getAdminStats, getAdminFeedback, downloadExcel } from "@/lib/api";
+import { getAdminStats, downloadExcel } from "@/lib/api";
 import { Users, UserCheck, Download, Loader2, ArrowRight, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 
@@ -31,7 +31,6 @@ function StatCard({ title, value, icon: Icon, color, delay }) {
 export default function AdminDashboardPage() {
   const router = useRouter();
   const [stats, setStats] = useState(null);
-  const [feedbackRows, setFeedbackRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [downloadingRegex, setDownloadingRegex] = useState(false);
@@ -50,11 +49,9 @@ export default function AdminDashboardPage() {
         return;
       }
       const result = await getAdminStats(token);
-      const feedbackResult = await getAdminFeedback(token);
       
       if (result.success) {
         setStats(result.data);
-        setFeedbackRows(feedbackResult.success ? (feedbackResult.data.feedback || []) : []);
       } else {
         // Token is invalid or expired — clear it and redirect to login
         if (result.status === 401 || result.status === 403) {
@@ -151,61 +148,23 @@ export default function AdminDashboardPage() {
       </div>
 
       <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8">
-        <div className="flex items-center justify-between gap-4 mb-6 border-b border-white/10 pb-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <h2 className="text-lg font-bold uppercase tracking-widest flex items-center gap-2">
               <MessageSquareText className="w-5 h-5 text-[#e62b1e]" />
               Feedback Submissions
             </h2>
-            <p className="text-white/40 text-sm mt-1">Latest entries from Supabase.</p>
+            <p className="text-white/40 text-sm mt-1">
+              {stats?.total_feedback || 0} entries stored with ratings, comments, and certificate status.
+            </p>
           </div>
-          <div className="text-white/50 text-xs tracking-widest uppercase font-semibold">
-            {feedbackRows.length} records
-          </div>
-        </div>
-
-        <div className="overflow-x-auto rounded-xl border border-white/10">
-          <table className="min-w-full text-left text-sm">
-            <thead className="bg-white/5 text-white/60 uppercase tracking-widest text-xs">
-              <tr>
-                <th className="px-4 py-3 font-semibold">Name</th>
-                <th className="px-4 py-3 font-semibold">Email</th>
-                <th className="px-4 py-3 font-semibold">Phone</th>
-                <th className="px-4 py-3 font-semibold">Rating</th>
-                <th className="px-4 py-3 font-semibold">Feedback</th>
-                <th className="px-4 py-3 font-semibold">Recipient</th>
-                <th className="px-4 py-3 font-semibold">Submitted At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {feedbackRows.length === 0 ? (
-                <tr>
-                  <td className="px-4 py-6 text-white/40" colSpan={7}>
-                    No feedback submissions found yet.
-                  </td>
-                </tr>
-              ) : (
-                feedbackRows.map((row, index) => (
-                  <tr key={`${row.email || row.name}-${row.created_at || index}`} className="border-t border-white/10 align-top">
-                    <td className="px-4 py-4 text-white">{row.name || "-"}</td>
-                    <td className="px-4 py-4 text-white/70">{row.email || "-"}</td>
-                    <td className="px-4 py-4 text-white/70">{row.phone || "-"}</td>
-                    <td className="px-4 py-4 text-white/70">{row.rating || "-"}</td>
-                    <td className="px-4 py-4 text-white/70 max-w-md">
-                      <span className="line-clamp-3">{row.feedback || "-"}</span>
-                    </td>
-                    <td className="px-4 py-4 text-white/70">
-                      <div>{row.recipient_name || "-"}</div>
-                      <div className="text-white/40 text-xs">{row.recipient_role || ""}</div>
-                    </td>
-                    <td className="px-4 py-4 text-white/50 whitespace-nowrap">
-                      {row.created_at ? new Date(row.created_at).toLocaleString() : "-"}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+          <Link
+            href="/admin/feedback"
+            className="inline-flex items-center justify-center gap-2 bg-[#e62b1e] text-white py-3 px-5 rounded-xl font-bold tracking-widest uppercase text-xs hover:bg-[#ff3b2e] transition-colors"
+          >
+            View All Feedback
+            <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 

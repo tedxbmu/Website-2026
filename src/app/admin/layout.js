@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LogOut, LayoutDashboard, ScanLine } from "lucide-react";
+import { LogOut, LayoutDashboard, ScanLine, MessageSquareText } from "lucide-react";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -62,6 +62,13 @@ export default function AdminLayout({ children }) {
                   <ScanLine className="w-4 h-4" />
                   Scanner
                 </Link>
+                <Link 
+                  href="/admin/feedback" 
+                  className={`text-sm tracking-widest uppercase font-semibold transition-colors flex items-center gap-2 ${pathname === "/admin/feedback" ? "text-[#e62b1e]" : "text-white/60 hover:text-white"}`}
+                >
+                  <MessageSquareText className="w-4 h-4" />
+                  Feedback
+                </Link>
               </nav>
             </div>
             
@@ -93,6 +100,13 @@ export default function AdminLayout({ children }) {
           >
             <ScanLine className="w-4 h-4" />
             Scanner
+          </Link>
+          <Link 
+            href="/admin/feedback" 
+            className={`flex-1 py-4 text-center border-b-2 transition-colors flex items-center justify-center gap-2 ${pathname === "/admin/feedback" ? "border-[#e62b1e] text-[#e62b1e]" : "border-transparent text-white/50"}`}
+          >
+            <MessageSquareText className="w-4 h-4" />
+            Feedback
           </Link>
         </div>
       )}

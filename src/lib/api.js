@@ -106,8 +106,13 @@ export async function getAdminStats(token) {
   });
 }
 
-export async function getAdminFeedback(token) {
-  return apiFetch("/api/admin/feedback", {
+export async function getAdminFeedback(token, { page = 1, limit = 10 } = {}) {
+  const params = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+
+  return apiFetch(`/api/admin/feedback?${params.toString()}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 }
