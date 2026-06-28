@@ -107,13 +107,13 @@ export default function Theme() {
             {/* RIGHT — Images */}
             <div className={`grid grid-cols-2 gap-4 transition-all duration-800 delay-200 will-change-transform ${visible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"}`}>
               <div className="col-span-1 row-span-2 bg-white/5 rounded-lg overflow-hidden h-80 border border-[#e62b1e]/20 flex items-center justify-center shadow-[0_0_30px_rgba(230,43,30,0.15)] hover:shadow-[0_0_50px_rgba(230,43,30,0.3)] hover:border-[#e62b1e]/40 transition-all duration-400">
-                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531094/9_yazhja.jpg" alt="Photo 1" className="w-full h-full object-cover" loading="lazy" />
+                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1782393147/DSC08775_jlfpxa.jpg" alt="Photo 1" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="bg-white/5 rounded-lg overflow-hidden h-[152px] border border-[#e62b1e]/20 flex items-center justify-center shadow-[0_0_20px_rgba(230,43,30,0.1)] hover:shadow-[0_0_40px_rgba(230,43,30,0.25)] hover:border-[#e62b1e]/40 transition-all duration-400">
-                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531093/7_maaxec.jpg" alt="Photo 2" className="w-full h-full object-cover" loading="lazy" />
+                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781595090/DSC00884_1_ruzj0s.jpg" alt="Photo 2" className="w-full h-full object-cover" loading="lazy" />
               </div>
               <div className="bg-white/5 rounded-lg overflow-hidden h-[152px] border border-[#e62b1e]/20 flex items-center justify-center shadow-[0_0_20px_rgba(230,43,30,0.1)] hover:shadow-[0_0_40px_rgba(230,43,30,0.25)] hover:border-[#e62b1e]/40 transition-all duration-400">
-                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1774531097/30_qrdsg5.jpg" alt="Photo 3" className="w-full h-full object-cover" loading="lazy" />
+                <img src="https://res.cloudinary.com/dhf3vdsqn/image/upload/v1781595210/DSC08502_1_yjmxdq.jpg" alt="Photo 3" className="w-full h-full object-cover" loading="lazy" />
               </div>
             </div>
 
