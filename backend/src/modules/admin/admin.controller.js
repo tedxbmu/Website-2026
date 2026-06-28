@@ -31,16 +31,22 @@ const loginAdmin = (req, res) => {
 
 const getStats = async (req, res) => {
   try {
-    // Single query: fetch only the column we need for counting
-    const { data, error } = await supabase
-      .from("registrations")
-      .select("attendance_marked");
+    const [registrationsResult, feedbackResult] = await Promise.all([
+      supabase.from("registrations").select("attendance_marked"),
+      supabase.from("feedback_submissions").select("id", { count: "exact", head: true }),
+    ]);
 
-    if (error) {
-      console.error("Stats query error:", error);
+    if (registrationsResult.error) {
+      console.error("Stats query error:", registrationsResult.error);
       return res.status(500).json({ message: "Failed to fetch stats" });
     }
 
+    if (feedbackResult.error) {
+      console.error("Feedback count query error:", feedbackResult.error);
+      return res.status(500).json({ message: "Failed to fetch stats" });
+    }
+
+    const data = registrationsResult.data;
     const total_registrations = data.length;
     const total_attended = data.filter((r) => r.attendance_marked === true).length;
     const total_remaining = total_registrations - total_attended;
@@ -54,6 +60,7 @@ const getStats = async (req, res) => {
       total_attended,
       total_remaining,
       attendance_percentage,
+      total_feedback: feedbackResult.count || 0,
     });
   } catch (err) {
     console.error("Stats error:", err.message || err);
@@ -173,21 +180,34 @@ const downloadAttended = async (req, res) => {
 
 const getFeedbackSubmissions = async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    const { data, error, count } = await supabase
       .from("feedback_submissions")
       .select(
-        "name, email, phone, rating, feedback, recipient_name, recipient_role, match_type, certificate_file, certificate_sent, certificate_email_id, created_at"
+        "id, name, email, phone, rating, feedback, recipient_name, recipient_role, match_type, certificate_file, certificate_sent, certificate_email_id, created_at",
+        { count: "exact" }
       )
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .range(from, to);
 
     if (error) {
       console.error("Feedback query error:", error);
       return res.status(500).json({ message: "Failed to fetch feedback" });
     }
 
+    const totalFeedback = count || 0;
+    const totalPages = Math.max(1, Math.ceil(totalFeedback / limit));
+
     return res.json({
       feedback: data,
-      total_feedback: data.length,
+      total_feedback: totalFeedback,
+      page,
+      limit,
+      total_pages: totalPages,
     });
   } catch (err) {
     console.error("Feedback error:", err.message || err);
