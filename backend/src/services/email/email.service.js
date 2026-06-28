@@ -139,7 +139,7 @@ class EmailService {
    * @throws {EmailError}
    */
   _validateCertificateParams(params) {
-    const { to, name, role, certificatePath, certificateBuffer } = params;
+    const { to, name, designation, certificatePath, certificateBuffer } = params;
 
     const errors = [];
 
@@ -151,8 +151,8 @@ class EmailService {
       errors.push("Invalid or missing name");
     }
 
-    if (!role || typeof role !== "string" || role.trim().length === 0) {
-      errors.push("Invalid or missing role");
+    if (!designation || typeof designation !== "string" || designation.trim().length === 0) {
+      errors.push("Invalid or missing designation");
     }
 
     if (
@@ -312,36 +312,49 @@ class EmailService {
    * @param {Object} params
    * @param {string} params.to - Recipient email
    * @param {string} params.name - Recipient name
-   * @param {string} params.role - Certificate role
+   * @param {string} params.designation - OC contribution designation
    * @param {Buffer} params.certificateBuffer - Certificate file buffer
    * @param {string} params.certificatePath - Local path to certificate file, for dev fallback
    * @param {string} params.certificateFile - Certificate filename
    * @returns {Promise<{success: boolean, emailId: string|null, error: string|null}>}
    */
-  async sendCertificateEmail({ to, name, role, certificateBuffer, certificatePath, certificateFile }) {
+  async sendCertificateEmail({
+    to,
+    name,
+    designation,
+    certificateBuffer,
+    certificatePath,
+    certificateFile,
+  }) {
     const startTime = Date.now();
 
     try {
       this._validateCertificateParams({
         to,
         name,
-        role,
+        designation,
         certificateBuffer,
         certificatePath,
       });
 
       EmailLogger.info("Sending certificate email", {
         to,
-        role,
+        designation,
         certificateFile,
       });
 
-      const htmlContent = generateCertificateEmail({ name, role });
-      const textContent = generateCertificateEmailText({ name, role });
+      const htmlContent = generateCertificateEmail({ name, designation });
+      const textContent = generateCertificateEmailText({ name, designation });
+
+      const attachmentFilename = certificateFile?.toLowerCase().endsWith(".pdf")
+        ? `TEDxBMU 2026 Certificate - ${name}.pdf`
+        : certificateFile || "TEDxBMU 2026 Certificate.pdf";
 
       const attachment = {
-        filename: certificateFile || "TEDxBMU Certificate.png",
-        contentType: "image/png",
+        filename: attachmentFilename,
+        contentType: certificateFile?.toLowerCase().endsWith(".pdf")
+          ? "application/pdf"
+          : "application/octet-stream",
         ...(certificateBuffer
           ? { content: certificateBuffer }
           : { path: certificatePath }),
@@ -361,7 +374,7 @@ class EmailService {
 
       EmailLogger.info("Certificate email sent successfully", {
         to,
-        role,
+        designation,
         messageId: info.messageId,
         duration: `${duration}ms`,
       });
@@ -376,7 +389,7 @@ class EmailService {
 
       EmailLogger.error("Failed to send certificate email", {
         to,
-        role,
+        designation,
         error: error.message,
         code: error.code,
         duration: `${duration}ms`,

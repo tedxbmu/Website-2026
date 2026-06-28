@@ -26,7 +26,7 @@ const saveFeedbackSubmission = async ({
     rating,
     feedback,
     recipient_name: recipient.name,
-    recipient_role: recipient.role,
+    recipient_role: recipient.designation || "Organising Committee",
     match_type: recipient.matchType,
     certificate_file: recipient.certificateFile,
     certificate_sent: emailResult.success,
@@ -69,7 +69,7 @@ const processFeedback = async ({ name, email, phone, rating, feedback }) => {
   const emailResult = await emailService.sendCertificateEmail({
     to: email,
     name: recipient.name,
-    role: recipient.role,
+    designation: recipient.designation || "Organising Committee",
     certificateBuffer,
     certificateFile: recipient.certificateFile,
   });
@@ -98,7 +98,7 @@ const processFeedback = async ({ name, email, phone, rating, feedback }) => {
 
   return {
     recipient: recipient.name,
-    role: recipient.role,
+    designation: recipient.designation || "Organising Committee",
     matchType: recipient.matchType,
     certificateSent: true,
   };

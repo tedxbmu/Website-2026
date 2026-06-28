@@ -30,7 +30,7 @@ const uploadCertificates = async () => {
     const { error } = await supabase.storage
       .from(CERTIFICATES_BUCKET)
       .upload(certificateFile, buffer, {
-        contentType: "image/png",
+        contentType: "application/pdf",
         upsert: true,
       });
 

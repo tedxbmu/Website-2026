@@ -6,7 +6,7 @@ const CERTIFICATES_BUCKET = process.env.CERTIFICATES_BUCKET || "certificates";
 
 const getLocalCertificatesDir = () =>
   process.env.CERTIFICATES_DIR ||
-  path.resolve(__dirname, "../../../../certificates/certificates_png");
+  path.resolve(__dirname, "../../../../certificates/TEDxBMU 2026 OC Certificates");
 
 const blobToBuffer = async (blob) => {
   const arrayBuffer = await blob.arrayBuffer();
