@@ -70,6 +70,7 @@ const submitFeedback = async (req, res) => {
       });
     }
 
+    // processFeedback never throws for missing certificates – feedback is always recorded
     const result = await feedbackService.processFeedback({
       name: cleanName,
       email: cleanEmail,
@@ -79,31 +80,10 @@ const submitFeedback = async (req, res) => {
     });
 
     return res.status(201).json({
-      message: "Feedback submitted successfully. Certificate has been emailed.",
+      message: "Feedback submitted successfully.",
       data: result,
     });
   } catch (error) {
-    if (error.code === "CERTIFICATE_NOT_FOUND") {
-      return res.status(404).json({
-        message: error.message,
-        code: error.code,
-      });
-    }
-
-    if (error.code === "CERTIFICATE_FILE_MISSING") {
-      return res.status(500).json({
-        message: "Certificate file is not available on the server",
-        code: error.code,
-      });
-    }
-
-    if (error.code === "CERTIFICATE_EMAIL_FAILED") {
-      return res.status(502).json({
-        message: error.message,
-        code: error.code,
-      });
-    }
-
     console.error("Feedback submission error:", error);
     return res.status(500).json({
       message: "Internal server error",

@@ -2,7 +2,8 @@ const fs = require("fs");
 const path = require("path");
 const supabase = require("../../config/db");
 
-const CERTIFICATES_BUCKET = process.env.CERTIFICATES_BUCKET || "certificates";
+// Must match the exact Supabase Storage bucket name
+const CERTIFICATES_BUCKET = process.env.CERTIFICATES_BUCKET || "TEDxBMU 2026 OC Certificates";
 
 const getLocalCertificatesDir = () =>
   process.env.CERTIFICATES_DIR ||

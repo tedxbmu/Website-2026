@@ -90,7 +90,7 @@ export default function FeedbackPage() {
       return;
     }
 
-    setSuccess("Feedback submitted. Your certificate has been sent to your email.");
+    setSuccess("Your response has been recorded successfully.");
     setForm(initialForm);
   };
 
@@ -113,7 +113,7 @@ export default function FeedbackPage() {
           </h1>
 
           <p className="mt-5 text-white/55 text-sm md:text-base leading-7 max-w-md">
-            Submit your event feedback to receive your mapped TEDxBMU certificate by email.
+            Share your thoughts about TEDxBMU 2026. We value your feedback.
           </p>
         </div>
 
@@ -125,9 +125,11 @@ export default function FeedbackPage() {
               </div>
               <div>
                 <h2 className="text-2xl md:text-3xl font-black font-heading uppercase">
-                  Certificate Sent
+                  Thank You!
                 </h2>
-                <p className="mt-3 text-white/50 text-sm max-w-sm">{success}</p>
+                <p className="mt-3 text-white/50 text-sm max-w-sm">
+                  Thank you for submitting your feedback! Your response has been recorded successfully.
+                </p>
               </div>
               <button
                 type="button"

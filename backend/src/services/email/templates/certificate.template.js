@@ -16,14 +16,16 @@ const formatContributionLine = (designation) => {
     return `We appreciate your contribution as a member of the <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
   }
 
+  // Handles: "Design Team", "Content Team", "Curation Team", "Event Management Team",
+  //          "Sponsorship Team", "Video Production Team", "Website Team", "Social Media and Marketing Team"
   if (/team$/i.test(designation.trim())) {
     return `We appreciate your contribution as part of the <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
   }
 
-  if (/lead$/i.test(designation.trim()) || /licensee$/i.test(designation.trim())) {
-    return `We appreciate your contribution as <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
-  }
-
+  // Handles: "Design Lead", "Curation Lead", "Website Lead", "Content Lead",
+  //          "Event Management Lead", "Social Media and Marketing Lead", "Video Production Lead",
+  //          "Licensee", "Co-Licensee", "Sponsorship Lead"
+  // Also handles: "Sierra President", "Sierra Vice-President"
   return `We appreciate your contribution as <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
 };
 
