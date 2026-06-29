@@ -16,17 +16,25 @@ const formatContributionLine = (designation) => {
     return `We appreciate your contribution as a member of the <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
   }
 
-  // Handles: "Design Team", "Content Team", "Curation Team", "Event Management Team",
-  //          "Sponsorship Team", "Video Production Team", "Website Team", "Social Media and Marketing Team"
-  if (/team$/i.test(designation.trim())) {
-    return `We appreciate your contribution as part of the <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
+  const normalized = designation.trim().toLowerCase();
+
+  // Roles that imply being part of a team
+  if (normalized.endsWith("team") || normalized === "social media and marketing") {
+    const roleText = normalized.endsWith("team") ? safeDesignation : `${safeDesignation} team`;
+    return `We appreciate your contribution as part of the <strong>${roleText}</strong> for TEDxBMU 2026.`;
   }
 
-  // Handles: "Design Lead", "Curation Lead", "Website Lead", "Content Lead",
-  //          "Event Management Lead", "Social Media and Marketing Lead", "Video Production Lead",
-  //          "Licensee", "Co-Licensee", "Sponsorship Lead"
-  // Also handles: "Sierra President", "Sierra Vice-President"
-  return `We appreciate your contribution as <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
+  // Leads, Licensees, Presidents
+  if (
+    normalized.endsWith("lead") ||
+    normalized.endsWith("licensee") ||
+    normalized.endsWith("president")
+  ) {
+    return `We appreciate your contribution as <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
+  }
+
+  // Fallback
+  return `We appreciate your contribution as a member of the <strong>${safeDesignation}</strong> for TEDxBMU 2026.`;
 };
 
 const generateCertificateEmail = ({ name, designation }) => {
@@ -82,9 +90,19 @@ const generateCertificateEmail = ({ name, designation }) => {
 
 const generateCertificateEmailText = ({ name, designation }) => {
   const roleLabel = designation || "Organising Committee";
-  const contributionLine = /team$/i.test(roleLabel.trim())
-    ? `We appreciate your contribution as part of the ${roleLabel} for TEDxBMU 2026.`
-    : `We appreciate your contribution as ${roleLabel} for TEDxBMU 2026.`;
+  const normalized = roleLabel.trim().toLowerCase();
+  let contributionLine = `We appreciate your contribution as a member of the ${roleLabel} for TEDxBMU 2026.`;
+
+  if (normalized.endsWith("team") || normalized === "social media and marketing") {
+    const roleText = normalized.endsWith("team") ? roleLabel : `${roleLabel} team`;
+    contributionLine = `We appreciate your contribution as part of the ${roleText} for TEDxBMU 2026.`;
+  } else if (
+    normalized.endsWith("lead") ||
+    normalized.endsWith("licensee") ||
+    normalized.endsWith("president")
+  ) {
+    contributionLine = `We appreciate your contribution as ${roleLabel} for TEDxBMU 2026.`;
+  }
 
   return `
 Hi ${name},
