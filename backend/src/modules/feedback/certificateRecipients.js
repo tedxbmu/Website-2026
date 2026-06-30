@@ -64,28 +64,28 @@ const normalizeName = (name) =>
     .replace(/\s+/g, " ");
 
 /**
- * Find a certificate recipient by email (primary) or name (fallback).
- * Email match is always attempted first across all recipients.
- * Name match is used as fallback across all recipients.
+ * Find a certificate recipient by name (primary) or email (fallback).
+ * Name match is always attempted first across all recipients.
+ * Email match is used as fallback across all recipients.
  */
 const findCertificateRecipient = ({ email, name }) => {
   const cleanEmail = normalizeEmail(email);
   const cleanName = normalizeName(name);
 
-  // 1. Match by email (case-insensitive) across all recipients
-  if (cleanEmail) {
-    const byEmail = certificateRecipients.find(
-      (r) => r.email && normalizeEmail(r.email) === cleanEmail
-    );
-    if (byEmail) return { ...byEmail, matchType: "email" };
-  }
-
-  // 2. Fallback: match by name (case-insensitive, whitespace-normalised)
+  // 1. Match by name (case-insensitive, whitespace-normalised) across all recipients
   if (cleanName) {
     const byName = certificateRecipients.find(
       (r) => normalizeName(r.name) === cleanName
     );
     if (byName) return { ...byName, matchType: "name" };
+  }
+
+  // 2. Fallback: match by email (case-insensitive)
+  if (cleanEmail) {
+    const byEmail = certificateRecipients.find(
+      (r) => r.email && normalizeEmail(r.email) === cleanEmail
+    );
+    if (byEmail) return { ...byEmail, matchType: "email" };
   }
 
   return null;
