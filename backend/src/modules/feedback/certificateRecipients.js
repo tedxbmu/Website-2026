@@ -72,7 +72,7 @@ const findCertificateRecipient = ({ email, name }) => {
   const cleanEmail = normalizeEmail(email);
   const cleanName = normalizeName(name);
 
-  // 1. Match by name (case-insensitive, whitespace-normalised) across all recipients
+  // 1. Match by exact name
   if (cleanName) {
     const byName = certificateRecipients.find(
       (r) => normalizeName(r.name) === cleanName
@@ -80,12 +80,37 @@ const findCertificateRecipient = ({ email, name }) => {
     if (byName) return { ...byName, matchType: "name" };
   }
 
-  // 2. Fallback: match by email (case-insensitive)
+  // 2. Match by exact email
   if (cleanEmail) {
     const byEmail = certificateRecipients.find(
       (r) => r.email && normalizeEmail(r.email) === cleanEmail
     );
     if (byEmail) return { ...byEmail, matchType: "email" };
+  }
+
+  // 3. Match by partial name (e.g., user enters "Mehul" instead of "Mehul Vig")
+  if (cleanName && cleanName.length >= 3) {
+    const partialMatches = certificateRecipients.filter((r) => {
+      const rName = normalizeName(r.name);
+      return rName.includes(cleanName) || cleanName.includes(rName);
+    });
+    // Only return if there's exactly one unambiguous match
+    if (partialMatches.length === 1) {
+      return { ...partialMatches[0], matchType: "partial_name" };
+    }
+  }
+
+  // 4. Match by partial email prefix (e.g., "mehul.vig" from "mehul.vig@gmail.com")
+  if (cleanEmail) {
+    const emailPrefix = cleanEmail.split("@")[0];
+    if (emailPrefix.length >= 3) {
+      const partialEmailMatches = certificateRecipients.filter(
+        (r) => r.email && normalizeEmail(r.email).startsWith(emailPrefix)
+      );
+      if (partialEmailMatches.length === 1) {
+        return { ...partialEmailMatches[0], matchType: "partial_email" };
+      }
+    }
   }
 
   return null;

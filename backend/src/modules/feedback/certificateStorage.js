@@ -3,7 +3,7 @@ const path = require("path");
 const supabase = require("../../config/db");
 
 // Must match the exact Supabase Storage bucket name
-const CERTIFICATES_BUCKET = process.env.CERTIFICATES_BUCKET || "TEDxBMU 2026 OC Certificates";
+const CERTIFICATES_BUCKET = process.env.CERTIFICATES_BUCKET || "certificates";
 
 const getLocalCertificatesDir = () =>
   process.env.CERTIFICATES_DIR ||
@@ -49,14 +49,13 @@ const getCertificateBuffer = async (certificateFile) => {
   try {
     return await downloadCertificate(certificateFile);
   } catch (error) {
-    if (process.env.NODE_ENV === "production") {
-      throw error;
-    }
-
     console.warn(
-      "[FEEDBACK] Supabase certificate download failed; falling back to local file:",
+      `[FEEDBACK] Supabase certificate download failed for ${certificateFile}; falling back to local file:`,
       error.message
     );
+    
+    // In production, the file might not exist locally depending on the host, 
+    // but we should always at least attempt to read it rather than strictly throwing.
     return readLocalCertificate(certificateFile);
   }
 };
